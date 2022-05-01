@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<title>Login</title>
+<link rel="stylesheet" type="text/css" th:href="@{/css/navigation.css}"/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<meta charset="UTF-8">
+<head>
+    <meta charset="UTF-8">
+    <title>Login page</title>
+</head>
+<body>
+<h1>Login</h1>
+<div class="container">
+    <form th:object="${user}" class = "form-singin" method="post"
+          th:action="@{/login}">
+        <h2 class="form-sigin-heading">Please, login</h2>
+        <label id="email" class="sr-only">Email</label>
+        <input type="email" th:field="${user.email}" class="form-control"
+               placeholder="Email" required autofocus>
+        <label id="password" class="sr-only">Password</label>
+        <input type="password" th:field="${user.password}"
+               class="form-control" placeholder="Password" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+    </form>
+</div>
+<a th:href="@{/registration}"><h3>Join</h3></a>
+<div th:fragment="footer"></div>
+</body>
+</html>

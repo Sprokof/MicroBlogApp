@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Home</title>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<div th:fragment="navigation"></div>
+<body>
+<h1>Home page</h1>
+<form th:object="${post}" role="form" th:action="@{/home}"
+      method="post" onsubmit="return validate(this);">
+    <div class="form-group">
+        <label>Create new post (150 char):</label>
+        <textarea name="postText" th:field="${post.postText}"
+                  class="form-control" rows="2"
+                  placeholder="write your text here" maxlength="150"></textarea>
+        <div id="textarea_feedback"></div>
+        <div>
+            <input type="submit" value="Submit" id="submit"/>
+            <input type="reset" value="Clear">
+        </div>
+    </div>
+    <div th:fragment="footer"></div>
+    <script>
+        $(document).ready(function () {
+            var text_max = 150;
+            $('#textarea_feedback').html(text_max + ' characters remaining ');
+            $('#postText').keyup(function () {
+                var text_length = $('#postText').val().length;
+                var text_remaining = text_max - text_length;
+                $('#textarea_feedback').html(text_remaining + ' characters remaining');
+            });
+        });
+        function validate(form) {
+            valid = true
+            if($('#postText').val().length == 0){
+                alert("Cannot submit empty post");
+                valid = false;
+            }
+            return valid;
+        }
+    </script>
+</form>
+</body>
+</html>

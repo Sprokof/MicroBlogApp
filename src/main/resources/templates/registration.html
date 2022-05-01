@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <head>
+        <title>Home</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/css/home.css}"/>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+</head>
+<body>
+<form th:action="@{/registration}" th:object="${user}" method="post">
+    <input type="hidden" name="registration" value="registration">
+                <h2>Registration</h2>
+    <h3>Username: <input type="text" th:field="${user.username}" placeholder="Username" value=""></h3>
+    <h3>Email: <input type="text" th:field="${user.email}" placeholder="Email" value=""></h3>
+    <h3>Password: <input type="password" th:field="${user.password}"
+                         placeholder="Password" value=""></h3>
+    <input type="submit" value="Submit"/>
+</form>
+</body>
+</html>
