@@ -23,9 +23,12 @@
         <input type="password" th:field="${user.password}"
                class="form-control" placeholder="Password" required>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Log in</button>
+        </br>
+        <div class="form-group">
+            <span>New user? <a href="/" th:href="@{/registration}">Registration here</a></span>
+        </div>
     </form>
 </div>
-<a th:href="@{/registration}"><h3>Join</h3></a>
 <div th:fragment="footer"></div>
 </body>
 </html>

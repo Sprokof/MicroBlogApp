@@ -6,6 +6,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
 
+import javax.management.relation.Role;
 import java.util.List;
 
 
@@ -13,7 +14,7 @@ import java.util.List;
 public class PostDaoImpl implements PostDao{
 
     private final SessionFactory sessionFactory =
-            Db.getSessionFactory(new Class[]{User.class, Post.class});
+            Db.getSessionFactory(new Class[]{User.class, Post.class, Role.class});
 
     @Override
     public void savePost(Post post) {

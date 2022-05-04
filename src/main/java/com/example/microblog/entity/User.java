@@ -20,6 +20,7 @@ import java.util.List;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name ="USER_ID")
     private int id;
     @Column(name = "JOIN_DATE")
     private String joinDate;
@@ -33,6 +34,9 @@ public class User {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<Post> posts;
 
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role", fetch = FetchType.EAGER)
+    private List<Role> roles;
+
 
     public void addPost(Post post){
         if(posts == null) this.posts = new LinkedList<>();
@@ -43,6 +47,17 @@ public class User {
     public void removePost(Post post){
         this.posts.remove(post);
         post.setUser(null);
+    }
+
+    public void addRole(Role role){
+        if(roles == null) this.roles = new LinkedList<>();
+        this.roles.add(role);
+        role.setUser(this);
+    }
+
+    public void removeRole(Role role){
+        this.roles.remove(role);
+        role.setUser(null);
     }
 
     public User(String email, String username, String password){

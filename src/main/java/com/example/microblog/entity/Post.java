@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
 
 @Entity
 @Table(name = "POSTS")
@@ -14,6 +13,7 @@ import java.util.Date;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "POST_ID")
     private int id;
     @Column(name = "POST_DATE")
     private String postDate;

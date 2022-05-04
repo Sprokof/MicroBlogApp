@@ -1,10 +1,11 @@
-package com.example.microblog.dao;
+package com.example.microblog.service;
 
 import com.example.microblog.entity.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserDao {
+public interface UserDetService extends UserDetailsService {
     User getUserById(int id);
     void saveUser(User user);
     void updateUser(User user);

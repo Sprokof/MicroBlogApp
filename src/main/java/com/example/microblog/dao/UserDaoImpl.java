@@ -1,6 +1,7 @@
 package com.example.microblog.dao;
 
 import com.example.microblog.entity.Post;
+import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +13,7 @@ import java.util.List;
 public class UserDaoImpl implements UserDao{
 
     private final SessionFactory sessionFactory =
-            Db.getSessionFactory(new Class[]{User.class, Post.class});
+            Db.getSessionFactory(new Class[]{User.class, Post.class, Role.class});
 
     @Override
     public User getUserById(int id) {
@@ -106,5 +107,27 @@ public class UserDaoImpl implements UserDao{
         this.sessionFactory.close();
     }
     return allUsers;
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Session session; User user = null;
+        try{
+            session = this.sessionFactory.getCurrentSession();
+            session.beginTransaction();
+            user = (User) session.
+                    createSQLQuery("SELECT * FROM USERS " +
+                            "WHERE EMAIL=:username").setParameter("username", username).
+                    addEntity(User.class).getSingleResult();
+            session.getTransaction().commit();}
+
+        catch (Exception e){
+            if(e instanceof NoResultException){ return null;}
+            else e.printStackTrace();
+        }
+        finally {
+            this.sessionFactory.close();
+        }
+        return user;
     }
 }
