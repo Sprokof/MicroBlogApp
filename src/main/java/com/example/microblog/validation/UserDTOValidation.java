@@ -3,12 +3,10 @@ package com.example.microblog.validation;
 import com.example.microblog.dto.UserDTO;
 import com.example.microblog.entity.User;
 import com.example.microblog.service.UserServiceImpl;
-import org.hibernate.Session;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
-import javax.persistence.NoResultException;
 import java.util.regex.Pattern;
 
 @Component

@@ -29,10 +29,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 logoutSuccessUrl("/login?logout").permitAll();
     }
 
-    @Bean
-    public BCryptPasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
-    }
 
 
     @Bean

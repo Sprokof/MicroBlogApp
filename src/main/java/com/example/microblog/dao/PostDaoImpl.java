@@ -19,6 +19,7 @@ public class PostDaoImpl implements PostDao{
     @Override
     public void savePost(Post post) {
         Session session = null;
+        post.setPostDate(User.currentTime());
     try{
         session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();

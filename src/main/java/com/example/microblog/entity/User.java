@@ -1,5 +1,6 @@
 package com.example.microblog.entity;
 
+import com.example.microblog.admin.Admin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -74,11 +75,31 @@ public class User {
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
-        if(!(obj instanceof  User)) return false;
-        User user = (User) obj;
+        if(!(obj instanceof  User) && !(obj instanceof Admin)) return false;
+        if(obj instanceof User){
+            User user = (User) obj;
         return this.email.equals(user.email) &&
                 this.username.equals(user.username) &&
                 this.password.equals(user.password);
+        }
+        Admin admin = (Admin) obj;
+        return this.email.equals(admin.getEmail());
+    }
+
+    public static String currentTime() {
+        String[] params = Calendar.getInstance().toString().split(",");
+        String hour; String minutes = params[24].
+                substring(params[24].indexOf("=")+1);
+
+        if (params[21].equals("AM_PM=1")) {
+            hour = String.valueOf(Integer.parseInt(params[22].
+                    substring(params[22].indexOf("=") + 1)) + 12);
+        } else {
+            hour = String.valueOf(Integer.parseInt(params[22].
+                    substring(params[22].indexOf("=") + 1)));
+        }
+        if(minutes.length() == 1) minutes = "0"+minutes;
+        return String.format("%s:%s", hour, minutes);
     }
 
     @Override

@@ -2,18 +2,17 @@ package com.example.microblog.controllers;
 
 import com.example.microblog.dto.UserDTO;
 import com.example.microblog.entity.User;
+import com.example.microblog.mail.ConfirmCode.*;
 import com.example.microblog.validation.UserDTOValidation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.Validator;
+
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.Calendar;
-
-import static com.example.microblog.service.UserServiceImpl.*;
+import static com.example.microblog.mail.ConfirmCode.sendCodeToEmail;
 
 
 @Controller
@@ -22,23 +21,30 @@ public class RegistrationController {
     private UserDTOValidation userDTOValidation =
             new UserDTOValidation();
 
+    @ModelAttribute("user")
+    public UserDTO userDTO(){
+    return new UserDTO();
+}
+
     @GetMapping("/registration")
     public String registration(Model model){
         UserDTO userDTO = new UserDTO();
-        model.addAttribute("dto", userDTO);
+        model.addAttribute("userDto", userDTO);
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(UserDTO userDTO, Model model, BindingResult result){
+    public String registration(@ModelAttribute("user") UserDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
-        if(result.hasErrors()){
+        User user = null;
+        if (result.hasErrors()) {
             return "/registration";
+        } else {
+            user = userDTO.toUser();
+            sendCodeToEmail(user.getEmail());
+            ModalController.setUser(user);
+            return "redirect:/registration/code";
         }
-
-        else{
-            getUserService().saveUser(userDTO.toUser());
-            model.addAttribute("userDTO", userDTO);
-        return "login";
     }
+
 }
