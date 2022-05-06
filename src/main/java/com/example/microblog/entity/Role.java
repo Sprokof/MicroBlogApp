@@ -17,7 +17,7 @@ public class Role {
     @Column(name = "ROLE_NAME")
     private String roleName;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
 

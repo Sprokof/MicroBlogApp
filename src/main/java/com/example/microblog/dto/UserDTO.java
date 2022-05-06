@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.AssertTrue;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -15,6 +17,8 @@ public class UserDTO {
     private String confirmEmail;
     private String password;
     private String confirmPassword;
+    @AssertTrue
+    private boolean terms;
 
     private UserDTO(String username, String email, String confirmEmail,
                     String password, String confirmPassword){

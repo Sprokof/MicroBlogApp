@@ -23,21 +23,6 @@ public class UserDTOValidation implements Validator {
         if(supports(o.getClass())) {
             UserDTO userDTO = (UserDTO) o;
 
-            User isExistEmail = UserServiceImpl.
-                    getUserService().getUserByEmail(userDTO.getEmail());
-
-            User isExistUsername = UserServiceImpl.
-                    getUserService().getUserByUsername(userDTO.getUsername());
-
-            if((isExistEmail != null) && (isExistUsername != null)){
-                if(isExistEmail.equals(isExistUsername)){
-                    errors.rejectValue("username", "Looks like you're " +
-                            "already have account");
-                }
-                else
-                    errors.rejectValue("email", "Email in use. Verify address");
-                    errors.rejectValue("username","Username in use. Try another");
-            }
 
             String usernamePattern = "^[a-zA-Z0-9](_(?!(\\.|_))|\\.(?!(_|\\.))|" +
                     "[a-zA-Z0-9]){6,18}[a-zA-Z0-9]$";
@@ -54,9 +39,11 @@ public class UserDTOValidation implements Validator {
                 errors.rejectValue("email", "Wrong.email.format");
             }
 
-            p = Pattern.compile("(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,20}");
+            p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 
             if (!p.matcher(userDTO.getPassword()).find()) {
+
+                System.out.println(userDTO.getPassword() + " " + p.matcher(userDTO.getPassword()).find());
                 errors.rejectValue("password", "Wrong.password.format");
             }
             if(!userDTO.getEmail().equals(userDTO.getConfirmEmail())){

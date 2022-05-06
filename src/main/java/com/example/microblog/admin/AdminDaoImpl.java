@@ -1,6 +1,9 @@
 package com.example.microblog.admin;
 
 import com.example.microblog.dao.Db;
+import com.example.microblog.entity.Post;
+import com.example.microblog.entity.Role;
+import com.example.microblog.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -12,7 +15,8 @@ import java.util.List;
 public class AdminDaoImpl implements AdminDao{
 
     private final SessionFactory sessionFactory
-            = Db.getSessionFactory(new Class<?>[]{Admin.class});
+            = Db.getSessionFactory(new Class<?>[]{Admin.class, Post.class,
+            User.class, Role.class});
 
 
     @Override

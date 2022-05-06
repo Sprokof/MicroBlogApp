@@ -1,5 +1,6 @@
 package com.example.microblog.dao;
 
+import com.example.microblog.admin.Admin;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.User;
 import org.hibernate.Session;
@@ -10,7 +11,8 @@ import javax.management.relation.Role;
 public class RoleDaoImpl implements RoleDao {
 
     private final SessionFactory sessionFactory =
-            Db.getSessionFactory(new Class[]{User.class, Post.class, Role.class});
+            Db.getSessionFactory(new Class[]{User.class,
+                    Post.class, Role.class, Admin.class});
 
     @Override
     public void saveRole(com.example.microblog.entity.Role role) {

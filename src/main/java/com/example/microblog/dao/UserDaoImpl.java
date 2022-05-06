@@ -1,5 +1,6 @@
 package com.example.microblog.dao;
 
+import com.example.microblog.admin.Admin;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
@@ -13,7 +14,8 @@ import java.util.List;
 public class UserDaoImpl implements UserDao{
 
     private final SessionFactory sessionFactory =
-            Db.getSessionFactory(new Class[]{User.class, Post.class, Role.class});
+            Db.getSessionFactory(new Class[]{User.class,
+                    Post.class, Role.class, Admin.class});
 
     @Override
     public User getUserById(int id) {

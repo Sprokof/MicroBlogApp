@@ -1,7 +1,10 @@
 package com.example.microblog.config;
 
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.context.support.ResourceBundleMessageSource;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/registration", "css").
+                .antMatchers(
+                        "/registration",
+                        "/js/**",
+                        "/css/**",
+                        "/img/**",
+                        "/webjars/**").
                 permitAll().anyRequest()
                 .authenticated().and().formLogin()
                 .loginPage("/login").
@@ -29,21 +37,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 logoutSuccessUrl("/login?logout").permitAll();
     }
 
+    //@Bean
+    //public DaoAuthenticationProvider authenticationProvider() {
+        //DaoAuthenticationProvider auth =
+          //      new DaoAuthenticationProvider();
+        //auth.setUserDetailsService(null);
+        //auth.setPasswordEncoder(new BCryptPasswordEncoder());
+      //  return auth;
+    //}
 
-
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider auth =
-                new DaoAuthenticationProvider();
-        auth.setUserDetailsService(null);
-        auth.setPasswordEncoder(encoder());
-        return auth;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(authenticationProvider());
-    }
+    //@Override
+    //protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+     //   auth.authenticationProvider(authenticationProvider());
+   // }
 
 }
 

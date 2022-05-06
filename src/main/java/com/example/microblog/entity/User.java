@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -31,11 +30,13 @@ public class User {
     private String username;
     @Column(name = "USER_PASSWORD")
     private String password;
+    @Column(name = "IS_ACCEPTED")
+    private boolean isAccepted;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Post> posts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "role", fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Role> roles;
 
 
@@ -65,6 +66,7 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.isAccepted = false;
     }
 
     public User(String username, String password){

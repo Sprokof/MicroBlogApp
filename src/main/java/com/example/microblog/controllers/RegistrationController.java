@@ -2,7 +2,7 @@ package com.example.microblog.controllers;
 
 import com.example.microblog.dto.UserDTO;
 import com.example.microblog.entity.User;
-import com.example.microblog.mail.ConfirmCode.*;
+import com.example.microblog.service.UserServiceImpl;
 import com.example.microblog.validation.UserDTOValidation;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,14 +36,12 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("user") UserDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
-        User user = null;
         if (result.hasErrors()) {
             return "/registration";
         } else {
-            user = userDTO.toUser();
-            sendCodeToEmail(user.getEmail());
-            ModalController.setUser(user);
-            return "redirect:/registration/code";
+            UserServiceImpl.
+                    getUserService().saveUser(userDTO.toUser());
+            return "/home";
         }
     }
 

@@ -11,8 +11,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
+
 @Controller
-public class ModalController {
+public class ConfirmCodeController {
 
     @Getter
     @Setter
@@ -21,21 +23,22 @@ public class ModalController {
     @GetMapping("/registration/code")
     public String modalWindow(Model model) {
         model.addAttribute("code", new String());
-        return "/modal";
+        return "/registration/modal";
     }
 
     @PostMapping("/registration/code")
-    public String modalWindow(Model model, String code, BindingResult result) {
+    public String modalWindow(Model model, @Valid String code, BindingResult result) {
         if (user != null) {
             if (ConfirmCode.compareCodes(user.getEmail(), code)) {
+                model.addAttribute("code", code);
                 return "/home";
             } else
                 result.rejectValue("code", "Wrong.code");
         }
         if (result.hasErrors()) {
-            return "/registration/code";
+            return "/registration/modal";
         }
-    return "/registration/code";
+    return "/registration/modal";
 
     }
 }
