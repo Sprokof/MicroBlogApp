@@ -36,6 +36,11 @@ public class RegistrationController {
     @PostMapping("/registration")
     public String registration(@ModelAttribute("user") UserDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
+        User userFromDb = UserServiceImpl.
+                getUserService().getUserByEmail(userDTO.getEmail());
+        if(userFromDb != null){
+            result.rejectValue("email", "User.already.exist");
+        }
         if (result.hasErrors()) {
             return "/registration";
         } else {

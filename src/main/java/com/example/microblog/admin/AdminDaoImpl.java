@@ -27,7 +27,7 @@ public class AdminDaoImpl implements AdminDao{
         session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();
         admin = (Admin) session.createSQLQuery("SELECT * FROM " +
-                "ADMINS WHERE ADMIN_EMAL=:email").
+                "ADMINS WHERE ADMIN_EMAIL=:email").
                 addEntity(Admin.class).
                 setParameter("email", email).getSingleResult();
         session.getTransaction().commit();

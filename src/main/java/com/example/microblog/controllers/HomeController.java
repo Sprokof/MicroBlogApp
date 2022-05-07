@@ -15,17 +15,16 @@ public class HomeController {
 
     @GetMapping("/home")
     public String home(Model model){
-        Post post = new Post();
-        model.addAttribute("post", post);
+        model.addAttribute("post", new Post());
         return "home";
     }
 
-    @PostMapping("/home")
-    public String home(Post post, Model model, HttpSession httpSession){
-        User user = (User) httpSession.getAttribute("user");
-        user.addPost(post);
-        model.addAttribute("post", post);
-        getPostService().savePost(post);
-        return "home";
-    }
+   // @PostMapping("/home")
+    //public String home(Post post, Model model, HttpSession httpSession){
+      //  User user = (User) httpSession.getAttribute("user");
+        //user.addPost(post);
+        //model.addAttribute("post", post);
+        //getPostService().savePost(post);
+        //return "home";
+    //}
 }

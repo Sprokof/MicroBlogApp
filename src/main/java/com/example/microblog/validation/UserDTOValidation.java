@@ -42,7 +42,6 @@ public class UserDTOValidation implements Validator {
             p = Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 
             if (!p.matcher(userDTO.getPassword()).find()) {
-
                 System.out.println(userDTO.getPassword() + " " + p.matcher(userDTO.getPassword()).find());
                 errors.rejectValue("password", "Wrong.password.format");
             }

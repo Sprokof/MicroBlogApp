@@ -57,6 +57,7 @@
         <label for="password" class="control-label">Password</label>
         <input id="password"
                class="form-control"
+               type="password"
                th:field="*{confirmPassword}"/>
         <p class="error-message"
            th:each="error : ${#fields.errors('password')}"

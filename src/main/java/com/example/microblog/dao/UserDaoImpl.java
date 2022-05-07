@@ -83,7 +83,8 @@ public class UserDaoImpl implements UserDao{
             session.getTransaction().commit();}
 
         catch (Exception e){
-            if(e instanceof NoResultException){ return null;}
+            System.out.println();
+            if(e instanceof NoResultException){ return null; }
         else e.printStackTrace();
         }
         finally {
