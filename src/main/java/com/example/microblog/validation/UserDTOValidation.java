@@ -1,8 +1,6 @@
 package com.example.microblog.validation;
 
-import com.example.microblog.dto.UserDTO;
-import com.example.microblog.entity.User;
-import com.example.microblog.service.UserServiceImpl;
+import com.example.microblog.dto.UserRegistrationDTO;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
@@ -15,13 +13,14 @@ public class UserDTOValidation implements Validator {
     @Override
     public boolean supports(Class<?> aClass) {
 
-        return UserDTO.class.equals(aClass);
+        return UserRegistrationDTO.class.equals(aClass);
     }
 
     @Override
     public void validate(Object o, Errors errors) {
         if(supports(o.getClass())) {
-            UserDTO userDTO = (UserDTO) o;
+            UserRegistrationDTO userDTO =
+                    (UserRegistrationDTO) o;
 
 
             String usernamePattern = "^[a-zA-Z0-9](_(?!(\\.|_))|\\.(?!(_|\\.))|" +

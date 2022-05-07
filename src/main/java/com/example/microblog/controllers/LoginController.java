@@ -1,5 +1,7 @@
 package com.example.microblog.controllers;
 
+import com.example.microblog.dto.UserLoginDTO;
+import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -18,8 +20,7 @@ public class LoginController {
 
     @GetMapping(value = {"/", "/login"})
     public String login(Model model){
-        System.out.println("");
-        model.addAttribute("user", new User());
+        model.addAttribute("user", new UserLoginDTO());
         return "/login";
     }
 
@@ -29,23 +30,15 @@ public class LoginController {
     }
 
     @PostMapping(value = {"/", "/login"})
-    public String login(@ModelAttribute("user") User user, Model model,
+    public String login(@ModelAttribute("user") UserLoginDTO userDTO, Model model,
                         BindingResult result){
-        User userFromDB = getUserService().
-                getUserByEmail(user.getEmail());
-        if(userFromDB != null) {
-            if (!userFromDB.getPassword().
-                    equals((new BCryptPasswordEncoder().encode(user.getPassword())))) {
-                result.rejectValue("email", "Invalid.password");
-            }
-        }
-        else{
+        if(!getUserService().isExist(userDTO)){
             result.rejectValue("email", "Invalid.password.email");
         }
         if(result.hasErrors()){
             return "login";
         }
-            model.addAttribute("user", user);
+            model.addAttribute("user", userDTO);
         return "home";
     }
 

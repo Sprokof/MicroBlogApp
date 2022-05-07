@@ -1,6 +1,6 @@
 package com.example.microblog.controllers;
 
-import com.example.microblog.dto.UserDTO;
+import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.User;
 import com.example.microblog.service.UserServiceImpl;
 import com.example.microblog.validation.UserDTOValidation;
@@ -22,19 +22,19 @@ public class RegistrationController {
             new UserDTOValidation();
 
     @ModelAttribute("user")
-    public UserDTO userDTO(){
-    return new UserDTO();
+    public UserRegistrationDTO userDTO(){
+        return new UserRegistrationDTO();
 }
 
     @GetMapping("/registration")
     public String registration(Model model){
-        UserDTO userDTO = new UserDTO();
+        UserRegistrationDTO userDTO = new UserRegistrationDTO();
         model.addAttribute("userDto", userDTO);
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") UserDTO userDTO, BindingResult result) {
+    public String registration(@ModelAttribute("user") UserRegistrationDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
         User userFromDb = UserServiceImpl.
                 getUserService().getUserByEmail(userDTO.getEmail());

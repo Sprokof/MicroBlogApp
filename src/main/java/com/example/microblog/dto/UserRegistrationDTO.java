@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.AssertTrue;
+import java.util.regex.Pattern;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserDTO {
+public class UserRegistrationDTO {
     private String username;
     private String email;
     private String confirmEmail;
@@ -20,7 +21,7 @@ public class UserDTO {
     @AssertTrue
     private boolean terms;
 
-    private UserDTO(String username, String email, String confirmEmail,
+    private UserRegistrationDTO(String username, String email, String confirmEmail,
                     String password, String confirmPassword){
         this.username = username;
         this.email = email;
@@ -33,7 +34,5 @@ public class UserDTO {
         String[] userFields = { this.getUsername(), this.getEmail(), this.getPassword() };
         return new User(userFields[0],userFields[1], userFields[2]);
     }
-
-
 
 }
