@@ -2,10 +2,12 @@ package com.example.microblog.dao;
 
 import com.example.microblog.admin.Admin;
 import com.example.microblog.dto.UserLoginDTO;
+import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
 import com.example.microblog.service.UserServiceImpl;
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +23,10 @@ public class UserDaoImpl implements UserDao {
             Db.getSessionFactory(new Class[]{User.class,
                     Post.class, Role.class, Admin.class});
 
+    public SessionFactory getSessionFactory(){
+        return this.sessionFactory;
+    }
+
     @Override
     public User getUserById(int id) {
         return null;
@@ -29,7 +35,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void saveUser(User user) {
         Session session;
-        String currentDate = Calendar.getInstance().getTime().toString();
+        String currentDate = UserRegistrationDTO.currentDate();
         try {
             session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
@@ -75,29 +81,6 @@ public class UserDaoImpl implements UserDao {
     }
 
     @Override
-    public User getUserByEmail(String email) {
-        Session session;
-        User user = null;
-        try {
-            session = this.sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            user = (User) session.
-                    createSQLQuery("SELECT * FROM USERS " +
-                            "WHERE EMAIL=:email").setParameter("email", email).
-                    addEntity(User.class).getSingleResult();
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.out.println();
-            if (e instanceof NoResultException) {
-                return null;
-            } else e.printStackTrace();
-        } finally {
-            this.sessionFactory.close();
-        }
-        return user;
-    }
-
-    @Override
     @SuppressWarnings("unchecked")
     public List<User> getAllUsers() {
         Session session;
@@ -108,6 +91,7 @@ public class UserDaoImpl implements UserDao {
             allUsers = session.
                     createSQLQuery("SELECT * FROM USERS").
                     addEntity(User.class).list();
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -120,50 +104,79 @@ public class UserDaoImpl implements UserDao {
     public User getUserByUsername(String username) {
         Session session;
         User user = null;
-        try {
+        try{
             session = this.sessionFactory.getCurrentSession();
             session.beginTransaction();
-            user = (User) session.
-                    createSQLQuery("SELECT * FROM USERS " +
-                            "WHERE EMAIL=:username").setParameter("username", username).
+            user = (User) session.createSQLQuery("SELECT * FROM " +
+                            "USERS WHERE USERNAME=:userame").
+                    setParameter("username", username).
                     addEntity(User.class).getSingleResult();
             session.getTransaction().commit();
-        } catch (Exception e) {
-            if (e instanceof NoResultException) {
-                return null;
-            } else e.printStackTrace();
-        } finally {
+        }
+        catch (Exception e){
+            if(e instanceof NoResultException) return null;
+            e.printStackTrace();
+        }
+        finally {
             this.sessionFactory.close();
         }
         return user;
+
     }
 
     @Override
-    public boolean isExistUser(UserLoginDTO user) {
-        String encodePassword = new BCryptPasswordEncoder().
-                encode(user.getPassword());
-        User thatUser = null;
+    public User getUserByEmail(String email) {
+        Session session;
+        User user = null;
+    try{
+        session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+        user = (User) session.createSQLQuery("SELECT * FROM " +
+                "USERS WHERE EMAIL=:email").
+                setParameter("email", email).
+                addEntity(User.class).getSingleResult();
+        session.getTransaction().commit();
+    }
+    catch (Exception e){
+        if(e instanceof NoResultException) return null;
+        e.printStackTrace();
+    }
+    finally {
+        this.sessionFactory.close();
+    }
+    return user;
+
+    }
+
+    @Override
+    public User getUserByLogin(String login) {
         Pattern email = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
                 Pattern.CASE_INSENSITIVE);
 
-        Session session;
-        try {
-            session = this.sessionFactory.getCurrentSession();
-            session.beginTransaction();
-            if (email.matcher(user.getLogin()).find()) {
-                thatUser = new UserDaoImpl().getUserByEmail(user.getLogin());
-            } else {
-                thatUser = new UserDaoImpl().getUserByUsername(user.getLogin());
-            }
+        String column = "USERNAME";
 
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            if (e instanceof NoResultException) {
-                return false;
-            }
-            e.printStackTrace();
-        }
-        return (thatUser != null);
+    if(email.matcher(login).find()) column = "EMAIL";
+
+    User user = null;
+        Session session;
+    try{
+        session = this.sessionFactory.getCurrentSession();
+        session.beginTransaction();
+    user = (User) session.createSQLQuery("SELECT * FROM USERS " +
+                "WHERE "+column+"=:login").addEntity(User.class).
+                setParameter("login", login).getSingleResult();
+        System.out.println(user);
+        session.getTransaction().commit();
+    }
+    catch (Exception e){
+        if(e instanceof NoResultException){ return null; }
+        e.printStackTrace();
+    }
+    finally {
+        this.sessionFactory.close();
+    }
+
+    return user;
     }
 }
 

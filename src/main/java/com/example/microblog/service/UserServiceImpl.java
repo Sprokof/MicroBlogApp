@@ -5,21 +5,25 @@ import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.dto.UserLoginDTO;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
+import org.hibernate.Session;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 
+import javax.persistence.NoResultException;
 import java.util.Collection;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class UserServiceImpl implements UserService, UserDetailsService {
+@Component
+public class UserServiceImpl implements UserService {
 
-    private final UserDao dao;
+    private final UserDaoImpl dao;
 
     private final BCryptPasswordEncoder encoder;
 
@@ -34,7 +38,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 roleService().getRole(user.getEmail());
         user.addRole(role);
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setJoinDate(User.currentTime());
         this.dao.saveUser(user);
         RoleServiceImpl.roleService().saveRole(role);
     }
@@ -54,7 +57,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.dao.deleteUser(user);
     }
 
-    @Override
     public User getUserByEmail(String email) {
         return this.dao.getUserByEmail(email);
     }
@@ -70,21 +72,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Override
     public User getUserByUsername(String username) {
+
         return this.dao.getUserByUsername(username);
     }
 
+
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Pattern p = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
-                Pattern.CASE_INSENSITIVE);
-        User user = null;
-        if(p.matcher(username).find()){
-            user = this.getUserByEmail(username);
-        }
-        else
-            user = this.getUserByUsername(username);
-        if(user == null){
-            throw new UsernameNotFoundException("Invalid username or password");
+        User user;
+        if((user = getUserByLogin(username)) == null){
+            throw new UsernameNotFoundException("Invalid login or password");
         }
         return new org.springframework.security
                 .core.userdetails.User(user.getUsername(),
@@ -97,9 +95,23 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-
     @Override
-    public boolean isExist(UserLoginDTO user) {
-        return this.dao.isExistUser(user);
+    public User getUserByLogin(String login){
+        Pattern email = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$",
+                Pattern.CASE_INSENSITIVE);
+        List<User> users = getUserService().getAllUser();
+        User user = null;
+        if(email.matcher(login).find()) {
+            for (User u : users) {
+                if (u.getEmail().equals(login))
+                return u;
+            }
+        }
+        for(User u : users) {
+            if (u.getUsername().equals(login))
+                return u;
+        }
+    return user;
+
     }
 }

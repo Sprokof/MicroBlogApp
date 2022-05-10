@@ -1,6 +1,7 @@
 package com.example.microblog.dao;
 
 import com.example.microblog.admin.Admin;
+import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
@@ -21,7 +22,7 @@ public class PostDaoImpl implements PostDao{
     @Override
     public void savePost(Post post) {
         Session session = null;
-        post.setPostDate(User.currentTime());
+        post.setPostDate(UserRegistrationDTO.currentDate());
     try{
         session = this.sessionFactory.getCurrentSession();
         session.beginTransaction();

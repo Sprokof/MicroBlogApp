@@ -20,7 +20,7 @@ public class Post {
     @Column(name = "POST_TEXT")
     private String postText;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 

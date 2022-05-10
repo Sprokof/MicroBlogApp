@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.AssertTrue;
+import java.util.Calendar;
 import java.util.regex.Pattern;
 
 @Getter
@@ -33,6 +34,20 @@ public class UserRegistrationDTO {
     public User toUser(){
         String[] userFields = { this.getUsername(), this.getEmail(), this.getPassword() };
         return new User(userFields[0],userFields[1], userFields[2]);
+    }
+
+    public static String currentDate() {
+        String[] tempDates = Calendar.getInstance().toString().split(",");
+        String day = tempDates[17].substring(tempDates[17].indexOf("=") + 1);
+        if (day.length() == 1) {
+            day = "0" + day;
+        }
+        String month = String.valueOf(Integer.parseInt(tempDates[14].substring(tempDates[14].indexOf("=") + 1)) + 1);
+        if (month.length() == 1) {
+            month = "0" + month;
+        }
+        String year = tempDates[13].substring(tempDates[13].indexOf("=") + 1);
+        return String.format("%s.%s.%s", day, month, year);
     }
 
 }

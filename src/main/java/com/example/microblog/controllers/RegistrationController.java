@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import javax.validation.Valid;
+
 import static com.example.microblog.mail.ConfirmCode.sendCodeToEmail;
 
 
@@ -34,10 +36,10 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") UserRegistrationDTO userDTO, BindingResult result) {
+    public String registration(@ModelAttribute("user") @Valid UserRegistrationDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
         User userFromDb = UserServiceImpl.
-                getUserService().getUserByEmail(userDTO.getEmail());
+                getUserService().getUserByLogin(userDTO.getEmail());
         if(userFromDb != null){
             result.rejectValue("email", "User.already.exist");
         }
@@ -46,7 +48,7 @@ public class RegistrationController {
         } else {
             UserServiceImpl.
                     getUserService().saveUser(userDTO.toUser());
-            return "/home";
+            return "login";
         }
     }
 
