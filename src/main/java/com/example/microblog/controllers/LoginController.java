@@ -22,9 +22,10 @@ public class LoginController {
 
     @PostMapping( value = {"/", "/login"})
     public String login(@ModelAttribute("user") UserLoginDTO userDTO) {
+        System.out.println("login controller");
         String encodePassword =
                 new BCryptPasswordEncoder().encode(userDTO.getPassword());
-        User user = (User) UserServiceImpl.getUserService().
+        User user = (User) new UserServiceImpl().
                 loadUserByUsername(userDTO.getLogin());
         if (user != null) {
             if (user.getPassword().equals(encodePassword)) {

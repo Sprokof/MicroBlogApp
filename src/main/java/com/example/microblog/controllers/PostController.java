@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.example.microblog.service.PostServiceImpl.getPostService;
@@ -21,7 +22,7 @@ public class PostController {
     @GetMapping("/posts")
     public String posts(Model model, HttpSession session){
         User user = (User) session.getAttribute("user");
-        List<Post> posts = user.getPosts();
+        Set<Post> posts = user.getPosts();
         model.addAttribute("posts", posts);
         model.addAttribute("user", user);
         return "posts";

@@ -1,15 +1,13 @@
 package com.example.microblog.entity;
 
-import com.example.microblog.admin.Admin;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "USERS")
@@ -33,16 +31,15 @@ public class User {
     @Column(name = "IS_ACCEPTED")
     private boolean isAccepted;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-    private List<Post> posts;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Post> posts;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user",
-            fetch = FetchType.EAGER)
-    private List<Role> roles;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
+    private Set<Role> roles;
 
 
     public void addPost(Post post){
-        if(posts == null) this.posts = new LinkedList<>();
+        if(posts == null) this.posts = new HashSet<>();
         this.posts.add(post);
         post.setUser(this);
     }
@@ -53,7 +50,7 @@ public class User {
     }
 
     public void addRole(Role role){
-        if(roles == null) this.roles = new LinkedList<>();
+        if(roles == null) this.roles = new HashSet<>();
         this.roles.add(role);
         role.setUser(this);
     }
@@ -67,26 +64,17 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
-        this.isAccepted = false;
-    }
-
-    public User(String username, String password){
-        this.username = username;
-        this.password = password;
     }
 
     @Override
     public boolean equals(Object obj) {
         if(this == obj) return true;
-        if(!(obj instanceof  User) && !(obj instanceof Admin)) return false;
-        if(obj instanceof User){
-            User user = (User) obj;
+        if(!(obj instanceof  User)) return false;
+        User user = (User) obj;
         return this.email.equals(user.email) &&
                 this.username.equals(user.username) &&
                 this.password.equals(user.password);
-        }
-        Admin admin = (Admin) obj;
-        return this.email.equals(admin.getEmail());
+
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.example.microblog.dao;
 
-import com.example.microblog.admin.Admin;
+
 import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
+import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.stereotype.Component;
@@ -15,9 +16,9 @@ import java.util.List;
 @Component
 public class PostDaoImpl implements PostDao{
 
-    private final SessionFactory sessionFactory =
-            Db.getSessionFactory(new Class[]{User.class,
-                    Post.class, Role.class, Admin.class});
+    @Getter
+    private static final SessionFactory sessionFactory =
+            DB.getInstance().getSessionFactory(new Class[]{User.class, Role.class, Post.class});
 
     @Override
     public void savePost(Post post) {
@@ -85,6 +86,9 @@ public class PostDaoImpl implements PostDao{
     catch (Exception e){
         e.printStackTrace();
     }
+    finally {
+        this.sessionFactory.close();
+    }
 
     }
 
@@ -120,6 +124,7 @@ public class PostDaoImpl implements PostDao{
             posts = session.createSQLQuery("SELECT * FROM POSTS " +
                             "WHERE USERS_ID!=thisId").setParameter("thisId", user.getId()).
                     addEntity(Post.class).list();
+            session.getTransaction().commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -142,6 +147,7 @@ public class PostDaoImpl implements PostDao{
                 createSQLQuery("SELECT * FROM POSTS " +
                         "WHERE POST_TEXT like:text").
                 addEntity(Post.class).setParameter("text", text).list();
+        session.getTransaction().commit();
     }
     catch (Exception e){e.printStackTrace();}
     finally {

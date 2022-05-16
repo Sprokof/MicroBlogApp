@@ -8,7 +8,6 @@ import lombok.Setter;
 
 import javax.validation.constraints.AssertTrue;
 import java.util.Calendar;
-import java.util.regex.Pattern;
 
 @Getter
 @Setter
@@ -22,7 +21,7 @@ public class UserRegistrationDTO {
     @AssertTrue
     private boolean terms;
 
-    private UserRegistrationDTO(String username, String email, String confirmEmail,
+    public UserRegistrationDTO(String username, String email, String confirmEmail,
                     String password, String confirmPassword){
         this.username = username;
         this.email = email;
@@ -32,9 +31,9 @@ public class UserRegistrationDTO {
     }
 
     public User toUser(){
-        String[] userFields = { this.getUsername(), this.getEmail(), this.getPassword() };
-        return new User(userFields[0],userFields[1], userFields[2]);
+        return new User(this.getEmail(), this.getUsername(), this.getPassword());
     }
+
 
     public static String currentDate() {
         String[] tempDates = Calendar.getInstance().toString().split(",");

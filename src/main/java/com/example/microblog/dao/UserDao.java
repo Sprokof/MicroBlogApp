@@ -1,8 +1,6 @@
 package com.example.microblog.dao;
 
-import com.example.microblog.dto.UserLoginDTO;
 import com.example.microblog.entity.User;
-import org.hibernate.Session;
 
 import java.util.List;
 
