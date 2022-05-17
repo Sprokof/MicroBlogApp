@@ -1,18 +1,13 @@
 package com.example.microblog.dao;
 
 
-import com.example.microblog.entity.Post;
-import com.example.microblog.entity.Role;
-import com.example.microblog.entity.User;
-import lombok.Getter;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
 public class RoleDaoImpl implements RoleDao {
 
-    @Getter
     private static final SessionFactory sessionFactory =
-            DB.getInstance().getSessionFactory(new Class[]{User.class, Role.class, Post.class});
+            InstanceSessionFactory.getInstance();
 
     @Override
     public void saveRole(com.example.microblog.entity.Role role) {

@@ -15,9 +15,8 @@ import java.util.regex.Pattern;
 
 public class UserDaoImpl implements UserDao {
 
-    @Getter
     private static final SessionFactory sessionFactory =
-            DB.getInstance().getSessionFactory(new Class[]{User.class, Role.class, Post.class});
+            InstanceSessionFactory.getInstance();
 
     @Override
     public User getUserById(int id) {
