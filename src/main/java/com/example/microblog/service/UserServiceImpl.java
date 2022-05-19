@@ -18,8 +18,8 @@ import java.util.stream.Collectors;
 @Component
 public class UserServiceImpl implements UserService {
 
-    private UserDaoImpl userDao;
-    private RoleDaoImpl roleDao;
+    private final UserDaoImpl userDao;
+    private final RoleDaoImpl roleDao;
 
     private final BCryptPasswordEncoder encoder;
 
@@ -53,7 +53,8 @@ public class UserServiceImpl implements UserService {
                 user.getPassword(), mapRolesToAuthorities(user.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
+    @Override
+    public Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles) {
         return roles.stream().
                 map((role -> new SimpleGrantedAuthority(role.getRoleName())))
                 .collect(Collectors.toSet());

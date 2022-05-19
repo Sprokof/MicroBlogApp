@@ -41,7 +41,8 @@ public class UserRegistrationDTO {
         if (day.length() == 1) {
             day = "0" + day;
         }
-        String month = String.valueOf(Integer.parseInt(tempDates[14].substring(tempDates[14].indexOf("=") + 1)) + 1);
+        String month = String.valueOf(Integer.parseInt(tempDates[14].
+                substring(tempDates[14].indexOf("=") + 1)) + 1);
         if (month.length() == 1) {
             month = "0" + month;
         }

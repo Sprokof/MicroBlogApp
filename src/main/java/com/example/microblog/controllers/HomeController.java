@@ -21,7 +21,7 @@ public class HomeController {
 
     @PostMapping("/home")
     public String home(Post post, Model model, HttpSession httpSession){
-       User user = (User) httpSession.getAttribute("user");
+        User user = (User) httpSession.getAttribute("user");
         user.addPost(post);
         model.addAttribute("post", post);
         getPostService().savePost(post);
