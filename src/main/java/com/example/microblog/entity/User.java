@@ -84,7 +84,6 @@ public class User {
                 ", email='" + email + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", posts=" + posts +
                 '}';
     }
 }

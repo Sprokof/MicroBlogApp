@@ -1,10 +1,10 @@
 package com.example.microblog.entity;
 
+import com.example.microblog.dto.UserRegistrationDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Calendar;
 
 @Entity
 @Table(name = "POSTS")
@@ -20,14 +20,22 @@ public class Post {
     @Column(name = "POST_TEXT")
     private String postText;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
 
     public Post(String postText){
         this.postText = postText;
-        this.postDate = String.valueOf((Calendar.getInstance().getTime()));
+        this.postDate = UserRegistrationDTO.currentDate();
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", postDate='" + postDate + '\'' +
+                ", postText='" + postText + '\'' +
+                '}';
+    }
 }

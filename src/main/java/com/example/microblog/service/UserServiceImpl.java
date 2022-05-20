@@ -4,6 +4,7 @@ import com.example.microblog.dao.RoleDaoImpl;
 import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
+import com.example.microblog.hash.MD5;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -32,7 +33,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public void saveUser(User user) {
         Role role = new Role("USER");
-        user.setPassword(encoder.encode(user.getPassword()));
+        String hashPassword = MD5.hash(user.getPassword());
+        user.setPassword(hashPassword);
         user.addRole(role);
         this.userDao.saveUser(user);
     }

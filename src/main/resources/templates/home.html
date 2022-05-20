@@ -25,7 +25,7 @@
             <input type="reset" value="Clear">
         </div>
     </div>
-    <div th:fragment="footer"></div>
+    <div th:inser="~{footer :: copy}"></div>
     <script>
         $(document).ready(function () {
             var text_max = 150;

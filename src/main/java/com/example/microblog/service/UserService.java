@@ -17,5 +17,5 @@ public interface UserService extends UserDetailsService {
     User existUserByUsername(String username);
     User existUserByEmail(String email);
     User getUserByLogin(String login);
-    Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles)
+    Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<Role> roles);
 }
