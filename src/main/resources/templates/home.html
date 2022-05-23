@@ -9,26 +9,74 @@
     <link rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
     <title>Home</title>
 </head>
-<div th:fragment="navigation"></div>
 <body>
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed"
+                    data-toggle="collapse" data-target="#bs-example-navbarcollapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+            </button>
+            <img src="/images/logo.png" th:alt="Logo"/>&nbsp;<h2>Blog</h2>
+        </div>
+        <div class="collapse navbar-collapse" id="bs-examplenavbar-collapse-1">
+            <ul class="nav navbar-nav">
+                <li class="active"><a th:href="@{/home}">Home<span
+                        class="sr-only">(current)</span></a></li>
+                <li><a th:href="@{/newsFeed}">News Feed</a></li>
+            </ul>
+            <form class="navbar-form navbar-right" role="search"
+                  th:action="@{/search}" method="get">
+                <div class="form-group">
+                    <input type="text" class="form-control"
+                           placeholder="Search" name="text">
+                </div>
+                <button type="submit" class="btn btn-default">Go!
+                </button>
+            </form>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a><img th:alt="*{currentUser.username}"> &nbsp;</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle"
+                       data-toggle="dropdown" role="button"
+                       aria-haspopup="true" aria-expanded="false">User
+                        Options <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <form class="navbar-form navbar-left"
+                                  role="form" th:action="@{/login}" method="post">
+                                <input type="hidden" name="action"
+                                       id="action" value="logout"/>
+                                <button class="btn btn-default"
+                                        id="addBookButton">Logout</button>
+                            </form>
+                        </li>
+                        <li><a th:href="@{/posts?userid=${currentUser.id}}">
+                            Show my posts</a></li>
+                        <li><a th:href="@{/editprofile?userlogin=${currentUser.id}}">Edit profile</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="support.html">Feedback</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
 <h1>Home page</h1>
 <form th:object="${post}" role="form" th:action="@{/home}"
       method="post" onsubmit="return validate(this);">
-    <div class="form-group">
-        <label th:for="${post}">Create new post (150 char):</label>
-        <textarea th:field="${post.postText}"
+        <label th:for="${post}">Create new post (140 char):</label>
+        <textarea id="area" th:field="${post.postText}"
                   class="form-control" rows="3"
-                  placeholder="write your text here" maxlength="150"></textarea>
+                  placeholder="write your text here" maxlength="140"></textarea>
         <div id="textarea_feedback"></div>
         <div>
-            <input type="submit" value="Submit" id="submit"/>
-            <input type="reset" value="Clear">
+            <button type="submit">Submit</button>
+            <button type="reset" onclick="clear();">Delete</button>
         </div>
-    </div>
-    <div th:inser="~{footer :: copy}"></div>
     <script>
         $(document).ready(function () {
-            var text_max = 150;
+            var text_max = 140;
             $('#textarea_feedback').html(text_max + ' characters remaining ');
             $('#postText').keyup(function () {
                 var text_length = $('#postText').val().length;
@@ -37,7 +85,7 @@
             });
         });
         function validate(form) {
-            valid = true
+           let valid = true
             if($('#postText').val().length == 0){
                 alert("Cannot submit empty post");
                 valid = false;
@@ -48,6 +96,8 @@
 
     <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
     <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
+
+    <div th:insert="~{footer :: copy}"></div>
 
 </form>
 </body>

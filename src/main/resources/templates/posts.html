@@ -6,11 +6,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
-<div class="container">
+<div class="container" th:insert="~{navigation :: copy}">
     <table class="table table-bordered">
         <thead>
         </thead>
-        <label>Your posts</label>
         <tr><th>User</th><th>Post</th><th>Date</th></tr>
         <tbody>
             <tr th:each="post : ${posts}">

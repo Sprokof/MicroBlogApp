@@ -6,6 +6,10 @@ h1 {
 .error-message {
     color: #a94442;
 }
+button{
+    color: black;
+    flex: 8px;
+}
 
 .error-message:first-letter {
     text-transform: capitalize;

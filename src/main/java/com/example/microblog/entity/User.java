@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.persistence.*;
 import java.util.*;
@@ -15,10 +18,11 @@ import java.util.*;
 @Getter
 @Setter
 @Scope("session")
+@SessionAttributes("user")
+@Component
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="USER_ID")
     private int id;
     @Column(name = "JOIN_DATE")
     private String joinDate;

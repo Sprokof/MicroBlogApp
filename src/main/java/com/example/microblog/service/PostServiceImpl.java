@@ -5,9 +5,11 @@ import com.example.microblog.dao.PostDaoImpl;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class PostServiceImpl implements PostService{
 
     public PostDao dao;

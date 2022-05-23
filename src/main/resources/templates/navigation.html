@@ -6,7 +6,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <meta charset="UTF-8">
 <nav class="navbar navbar-default">
-    <div class="container-fluid">
+    <div th:fragment="copy" class="container-fluid" th:object="${session.user}">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
                     data-toggle="collapse" data-target="#bs-example-navbarcollapse-1" aria-expanded="false">
@@ -26,15 +26,11 @@
                     <input type="text" class="form-control"
                            placeholder="Search" name="text">
                 </div>
-                <button type="submit" class="btn btn-default">Submit
+                <button type="submit" class="btn btn-default">Go!
                 </button>
             </form>
             <ul class="nav navbar-nav navbar-right">
-                <% if (session.getAttribute("user") != null) { %>
-                <li><a href="${pageContext.request.contextPath}/viewprofile?userid=${user.id}">
-                    <img alt="${user.username}" src=<%UserServiceImpl.
-                         userService().getGravatarURL(user.getEmail(), 30);%>/>&nbsp;${user.username}</a></li>
-                <% } %>
+                <li><a><img th:alt="${}"> &nbsp;</a></li>
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle"
                        data-toggle="dropdown" role="button"
@@ -43,19 +39,18 @@
                     <ul class="dropdown-menu">
                         <li>
                             <form class="navbar-form navbar-left"
-                                  role="form" action="@{/login}" method="post">
+                                  role="form" th:action="@{/login}" method="post">
                                 <input type="hidden" name="action"
                                        id="action" value="logout"/>
                                 <button class="btn btn-default"
                                         id="addBookButton">Logout</button>
-                                <%new SimpleSessionStatus().setComplete();%>
                             </form>
                         </li>
-                        <li><a href="${pageContext.request.contextPath}/posts?userid=${user.id}">
-                            Show my Posts</a></li>
-                        <li><a href="${pageContext.request.contextPath}/editprofile?userid=${user.id}">Edit Profile</a></li>
+                        <li><a th:href="@{/posts?userid=${}}">
+                            Show my posts</a></li>
+                        <li><a th:href="@{/editprofile?userid=${}}">Edit profile</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="support.jsp">Feedback</a></li>
+                        <li><a href="support.html">Feedback</a></li>
                     </ul>
                 </li>
             </ul>

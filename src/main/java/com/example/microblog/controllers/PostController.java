@@ -42,7 +42,7 @@ public class PostController {
                 !p.getUser().equals(currentUser)).collect(Collectors.toList());
     }
     model.addAttribute("posts", posts);
-    return "searchedPosts";
+    return "/search";
     }
 
     @GetMapping("/newsFeed")
@@ -50,7 +50,7 @@ public class PostController {
         User currentUser = (User) session.getAttribute("user");
         List<Post> posts = getPostService().getAllPost(currentUser);
         model.addAttribute("posts", posts);
-        return "newsFeed";
+        return "navigation";
     }
 
 }
