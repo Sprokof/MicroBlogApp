@@ -1,6 +1,7 @@
 package com.example.microblog.dto;
 
 
+import com.example.microblog.builder.UserBuilder;
 import com.example.microblog.entity.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Calendar;
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRegistrationDTO {
+public class UserRegistrationDTO implements UserBuilder {
     private String username;
     private String email;
     private String confirmEmail;
@@ -28,10 +29,6 @@ public class UserRegistrationDTO {
         this.confirmEmail = confirmEmail;
         this.password = password;
         this.confirmPassword = confirmPassword;
-    }
-
-    public User toUser(){
-        return new User(this.getEmail(), this.getUsername(), this.getPassword());
     }
 
 
@@ -64,6 +61,64 @@ public class UserRegistrationDTO {
         }
         if(minutes.length() == 1) minutes = "0"+minutes;
         return String.format("%s:%s", hour, minutes);
+    }
+
+    //Implementation builder
+
+
+    public static UserBuilder builder() {
+        return new UserRegistrationDTO();
+    }
+
+    private static final String[] fields = new String[3];
+
+    @Override
+    public UserBuilder email(String email) {
+        if(email == null) return null;
+        this.email = email;
+        int index;
+        if((index = findNullIndex()) != - 1 ){
+            fields[index] = email;
+        }
+        return this;
+    }
+
+    @Override
+    public UserBuilder username(String username) {
+        if(username == null) return null;
+        this.username = username;
+        int index;
+        if((index = findNullIndex()) != - 1 ){
+            fields[index] = username;
+        }
+        return this;
+    }
+
+    @Override
+    public UserBuilder password(String password) {
+        if(password == null) return null;
+        this.password = password;
+        int index;
+        if((index = findNullIndex()) != - 1 ){
+            fields[index] = password;
+        }
+        return this;
+    }
+
+    @Override
+    public User build() {
+        for(String field : fields){
+            if(field == null) return null;
+        }
+        return new User(email, username, password);
+    }
+
+
+    private int findNullIndex(){
+        for(int i = 0; i < fields.length; i++){
+            if(fields[i] == null){ return i; }
+        }
+        return - 1;
     }
 
 }

@@ -24,25 +24,28 @@ public class RegistrationController {
     private final UserServiceImpl userService = new UserServiceImpl();
     private final UserDTOValidation userDTOValidation = new UserDTOValidation();
 
-    @ModelAttribute("user")
+    @ModelAttribute("userDTO")
     public UserRegistrationDTO userDTO(){
         return new UserRegistrationDTO();
 }
 
     @GetMapping("/registration")
-    public String registration(Model model){
-        UserRegistrationDTO userDTO = new UserRegistrationDTO();
-        model.addAttribute("user", userDTO);
+    public String registration(){
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("user") @Valid UserRegistrationDTO userDTO, BindingResult result) {
+    public String registration(@ModelAttribute("userDTO") @Valid UserRegistrationDTO userDTO, BindingResult result) {
         userDTOValidation.validate(userDTO, result);
         if (result.hasErrors()) {
             return "/registration";
         } else {
-            userService.saveUser(userDTO.toUser());
+            User user = UserRegistrationDTO.
+                    builder().email(userDTO.getEmail()).
+                    username(userDTO.getUsername()).
+                    password(userDTO.getPassword()).build();
+            
+            userService.saveUser(user);
             return "login";
         }
     }

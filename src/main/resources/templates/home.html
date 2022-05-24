@@ -51,9 +51,9 @@
                                         id="addBookButton">Logout</button>
                             </form>
                         </li>
-                        <li><a th:href="@{/posts?userid=${currentUser.id}}">
+                        <li><a th:href="@{'/posts?userid=' + ${currentUser.id}}">
                             Show my posts</a></li>
-                        <li><a th:href="@{/editprofile?userlogin=${currentUser.id}}">Edit profile</a></li>
+                        <li><a th:href="@{'/editprofile?userid=' + ${currentUser.id}}">Edit profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="support.html">Feedback</a></li>
                     </ul>
@@ -66,27 +66,27 @@
 <form th:object="${post}" role="form" th:action="@{/home}"
       method="post" onsubmit="return validate(this);">
         <label th:for="${post}">Create new post (140 char):</label>
-        <textarea id="area" th:field="${post.postText}"
+        <textarea id="postText" th:type="text" th:field="${post.postText}"
                   class="form-control" rows="3"
                   placeholder="write your text here" maxlength="140"></textarea>
         <div id="textarea_feedback"></div>
         <div>
-            <button type="submit">Submit</button>
-            <button type="reset" onclick="clear();">Delete</button>
+            <input type="submit" name="submit" value="Submit"/>
+            <input type="reset" name="reset" value="Clear"/>
         </div>
     <script>
         $(document).ready(function () {
-            var text_max = 140;
+            let text_max = 140;
             $('#textarea_feedback').html(text_max + ' characters remaining ');
             $('#postText').keyup(function () {
-                var text_length = $('#postText').val().length;
-                var text_remaining = text_max - text_length;
+                let text_length = $('#postText').val().length;
+                let text_remaining = text_max - text_length;
                 $('#textarea_feedback').html(text_remaining + ' characters remaining');
             });
         });
         function validate(form) {
            let valid = true
-            if($('#postText').val().length == 0){
+            if($('#postText').val().length === 0){
                 alert("Cannot submit empty post");
                 valid = false;
             }
