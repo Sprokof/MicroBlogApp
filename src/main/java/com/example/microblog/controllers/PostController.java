@@ -1,11 +1,13 @@
 package com.example.microblog.controllers;
 
 
+import com.example.microblog.config.AuthProvider;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpSession;
@@ -19,12 +21,14 @@ import static com.example.microblog.service.PostServiceImpl.getPostService;
 public class PostController {
 
 
+    @ModelAttribute("currentUser")
+    public User getCurrentUser() {
+        return AuthProvider.getCurrentUser();
+    }
+
+
     @GetMapping("/posts")
-    public String posts(Model model, HttpSession session){
-        User user = (User) session.getAttribute("user");
-        Set<Post> posts = user.getPosts();
-        model.addAttribute("posts", posts);
-        model.addAttribute("user", user);
+    public String posts(Model model){
         return "posts";
 
     }

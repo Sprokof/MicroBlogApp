@@ -46,9 +46,9 @@
                                         id="addBookButton">Logout</button>
                             </form>
                         </li>
-                        <li><a th:href="@{/posts?userid=${}}">
+                        <li><a th:href="@{'/posts?userid=' + ${9}}">
                             Show my posts</a></li>
-                        <li><a th:href="@{/editprofile?userid=${}}">Edit profile</a></li>
+                        <li><a th:href="@{'/editprofile?userid=' + ${99}}">Edit profile</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="support.html">Feedback</a></li>
                     </ul>
