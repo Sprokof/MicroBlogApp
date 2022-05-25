@@ -44,7 +44,7 @@ public class RegistrationController {
                     builder().email(userDTO.getEmail()).
                     username(userDTO.getUsername()).
                     password(userDTO.getPassword()).build();
-            
+
             userService.saveUser(user);
             return "login";
         }

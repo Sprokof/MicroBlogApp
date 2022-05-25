@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.AssertTrue;
+import java.lang.reflect.Field;
 import java.util.Calendar;
 
 @Getter
@@ -65,21 +66,14 @@ public class UserRegistrationDTO implements UserBuilder {
 
     //Implementation builder
 
-
     public static UserBuilder builder() {
         return new UserRegistrationDTO();
     }
 
-    private static final String[] fields = new String[3];
 
     @Override
     public UserBuilder email(String email) {
-        if(email == null) return null;
         this.email = email;
-        int index;
-        if((index = findNullIndex()) != - 1 ){
-            fields[index] = email;
-        }
         return this;
     }
 
@@ -87,38 +81,36 @@ public class UserRegistrationDTO implements UserBuilder {
     public UserBuilder username(String username) {
         if(username == null) return null;
         this.username = username;
-        int index;
-        if((index = findNullIndex()) != - 1 ){
-            fields[index] = username;
-        }
         return this;
     }
 
     @Override
     public UserBuilder password(String password) {
-        if(password == null) return null;
         this.password = password;
-        int index;
-        if((index = findNullIndex()) != - 1 ){
-            fields[index] = password;
-        }
         return this;
     }
 
     @Override
     public User build() {
-        for(String field : fields){
-            if(field == null) return null;
+        if (!containsNull(this)) {
+            return new User(email, username, password);
         }
-        return new User(email, username, password);
+        return null;
     }
 
 
-    private int findNullIndex(){
-        for(int i = 0; i < fields.length; i++){
-            if(fields[i] == null){ return i; }
+    @Override
+    public boolean containsNull(UserBuilder builder) {
+        Field[] fields = builder.getClass().getFields();
+        int index = 0;
+        while (index != fields.length) {
+
+            if (fields[index] == null) return true;
+
+            index++;
         }
-        return - 1;
+        return false;
+
     }
 
 }

@@ -7,4 +7,5 @@ public interface UserBuilder {
     UserBuilder username(String username);
     UserBuilder password(String password);
     User build();
+    boolean containsNull(UserBuilder builder);
 }
