@@ -10,11 +10,13 @@ import lombok.Setter;
 import javax.validation.constraints.AssertTrue;
 import java.lang.reflect.Field;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserRegistrationDTO implements UserBuilder {
+public class UserRegistrationDTO extends UserBuilder {
     private String username;
     private String email;
     private String confirmEmail;
@@ -71,11 +73,13 @@ public class UserRegistrationDTO implements UserBuilder {
     }
 
 
-    @Override
+
+   @Override
     public UserBuilder email(String email) {
-        this.email = email;
+       this.email = email;
         return this;
     }
+
 
     @Override
     public UserBuilder username(String username) {

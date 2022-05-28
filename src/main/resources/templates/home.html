@@ -66,7 +66,8 @@
 <form th:object="${post}" role="form" th:action="@{/home}"
       method="post" onsubmit="return validate(this);">
         <label th:for="${post}">Create new post (140 char):</label>
-        <textarea id="postText" th:type="text" th:field="${post.postText}"
+        <textarea style="width: 500px; height: 100px; resize: none"
+                  id="postText" th:type="text" th:field="${post.postText}"
                   class="form-control" rows="3"
                   placeholder="write your text here" maxlength="140"></textarea>
         <div id="textarea_feedback"></div>
@@ -94,11 +95,10 @@
         }
     </script>
 
-    <script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
-    <script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
-
     <div th:insert="~{footer :: copy}"></div>
 
 </form>
+<script type="text/javascript" th:src="@{/webjars/jquery/3.2.1/jquery.min.js/}"></script>
+<script type="text/javascript" th:src="@{/webjars/bootstrap/3.3.7/js/bootstrap.min.js}"></script>
 </body>
 </html>

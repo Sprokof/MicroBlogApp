@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
+import java.security.Principal;
 import java.util.Set;
 
 @Component
@@ -35,7 +36,6 @@ public class AuthProvider implements AuthenticationProvider {
 
         String password = MD5.hash(authentication.getCredentials().toString());
 
-        System.out.println(password);
 
         User current = userService.getUserByLogin(username);
 
@@ -47,6 +47,7 @@ public class AuthProvider implements AuthenticationProvider {
         }
         Set<GrantedAuthority> userAuthorities =
                 (Set<GrantedAuthority>) userService.mapRolesToAuthorities(current.getRoles());
+
 
         UserDetails user =  new org.springframework.security
                 .core.userdetails.User(current.getUsername(),
@@ -63,9 +64,10 @@ public class AuthProvider implements AuthenticationProvider {
     }
 
     public static User getCurrentUser(){
-       SecurityContext context = SecurityContextHolder.getContext();
-       String username = ((UserDetails) context.getAuthentication().
-               getPrincipal()).getUsername();
+        SecurityContext context = SecurityContextHolder.getContext();
+        String username = ((UserDetails) context.getAuthentication().
+                getPrincipal()).getUsername();
+
         return new UserServiceImpl().getUserByLogin(username);
     }
 }

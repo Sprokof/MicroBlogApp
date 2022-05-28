@@ -36,14 +36,14 @@ public class User {
     private boolean isAccepted;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
-    private Set<Post> posts;
+    private List<Post> posts;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private Set<Role> roles;
 
 
     public void addPost(Post post){
-        if(posts == null) this.posts = new HashSet<>();
+        if(posts == null) this.posts = new LinkedList<Post>();
         this.posts.add(post);
         post.setUser(this);
     }

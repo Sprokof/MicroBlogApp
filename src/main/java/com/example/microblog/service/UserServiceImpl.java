@@ -1,5 +1,6 @@
 package com.example.microblog.service;
 
+import com.example.microblog.builder.UserBuilder;
 import com.example.microblog.dao.RoleDaoImpl;
 import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
@@ -74,14 +75,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User existUserByEmail(String email) {
-       return this.userDao.getUserByEmail(email);
+        return this.userDao.getUserByEmail(email);
     }
 
     @Override
     public User getUserByLogin(String login) {
         return this.userDao.getUserByLogin(login);
     }
-
 }
 
 
