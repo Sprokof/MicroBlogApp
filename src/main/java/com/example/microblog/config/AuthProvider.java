@@ -3,7 +3,6 @@ package com.example.microblog.config;
 import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.User;
 import com.example.microblog.hash.MD5;
-import com.example.microblog.httpSession.Session;
 import com.example.microblog.service.UserService;
 import com.example.microblog.service.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -32,7 +32,7 @@ public class PostController {
 
     @ModelAttribute("currentUser")
     public User getCurrentUser() {
-        return AuthProvider.getCurrentUser();
+        return userService.getCurrentUser();
     }
 
 
@@ -54,17 +54,15 @@ public class PostController {
     }
 
     @PostMapping("/post/delete")
-    public String deletePost(@RequestParam ("postid") String id){
-        System.out.println(id);
+    public String deletePost(@RequestParam ("postid") String id, Model model){
         Post postToDelete = postService.getPostById((Integer.parseInt(id)));
         if(postToDelete != null) {
-            User user = AuthProvider.getCurrentUser();
+            User user = (User) model.getAttribute("currentUser");
+            assert user != null;
             user.removePost(postToDelete);
             postService.deletePost(postToDelete);
             userService.updateUser(user);
         }
-        
-        System.out.println("diagnostic");
 
     return "posts";
     }
@@ -75,8 +73,8 @@ public class PostController {
     }
 
     @GetMapping("/search")
-    public String search(@RequestParam String text, Model model, HttpSession session){
-    User currentUser = (User) session.getAttribute("user");
+    public String search(@RequestParam String text, Model model){
+    User currentUser = (User) model.getAttribute("currentUser");
     List<Post> posts;
     if(text.isEmpty()) {
         posts = postService.getAllPost(currentUser); }
@@ -91,11 +89,11 @@ public class PostController {
     }
 
     @GetMapping("/newsFeed")
-    public String newsFeed(Model model, HttpSession session){
-        User currentUser = (User) session.getAttribute("user");
+    public String newsFeed(Model model){
+        User currentUser = (User) model.getAttribute("currentUser");
         List<Post> posts = getPostService().getAllPost(currentUser);
         model.addAttribute("posts", posts);
-        return "navigation";
+        return "newsFeed";
     }
 
 }

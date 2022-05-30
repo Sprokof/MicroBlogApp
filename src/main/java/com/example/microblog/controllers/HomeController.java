@@ -4,7 +4,6 @@ import com.example.microblog.config.AuthProvider;
 import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.User;
-import com.example.microblog.httpSession.Session;
 import com.example.microblog.service.PostService;
 import com.example.microblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

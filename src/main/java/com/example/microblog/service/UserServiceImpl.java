@@ -8,6 +8,8 @@ import com.example.microblog.entity.User;
 import com.example.microblog.hash.MD5;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -81,6 +83,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getUserByLogin(String login) {
         return this.userDao.getUserByLogin(login);
+    }
+
+    public User getCurrentUser(){
+        SecurityContext context = SecurityContextHolder.getContext();
+        String username = ((UserDetails) context.getAuthentication().
+                getPrincipal()).getUsername();
+        return this.userDao.getUserByLogin(username);
     }
 }
 
