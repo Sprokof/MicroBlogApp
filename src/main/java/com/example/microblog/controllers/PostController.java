@@ -35,7 +35,6 @@ public class PostController {
         return userService.getCurrentUser();
     }
 
-
     @ModelAttribute("posts")
     public List<Post> ListOfPosts(){
        List<Post> posts = AuthProvider.
@@ -72,17 +71,19 @@ public class PostController {
       return "posts";
     }
 
+
     @GetMapping("/search")
     public String search(@RequestParam String text, Model model){
-    User currentUser = (User) model.getAttribute("currentUser");
-    List<Post> posts;
+        System.out.println(text);
+        model.addAttribute("text", text);
+        User currentUser = (User) model.getAttribute("currentUser");
+        List<Post> posts;
     if(text.isEmpty()) {
+        System.out.println(true);
         posts = postService.getAllPost(currentUser); }
 
     else {
         posts = postService.getPostByText(text);
-        posts = posts.stream().filter((p) ->
-                !p.getUser().equals(currentUser)).collect(Collectors.toList());
     }
     model.addAttribute("posts", posts);
     return "/search";

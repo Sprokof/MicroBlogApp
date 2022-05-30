@@ -1,6 +1,7 @@
 package com.example.microblog.service;
 
 import com.example.microblog.builder.UserBuilder;
+import com.example.microblog.config.AuthProvider;
 import com.example.microblog.dao.RoleDaoImpl;
 import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
@@ -49,6 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
         User user;
         if ((user = getUserByLogin(username)) == null) {
             throw new UsernameNotFoundException("Invalid login or password");
@@ -87,10 +89,11 @@ public class UserServiceImpl implements UserService {
 
     public User getCurrentUser(){
         SecurityContext context = SecurityContextHolder.getContext();
-        String username = ((UserDetails) context.getAuthentication().
-                getPrincipal()).getUsername();
-        return this.userDao.getUserByLogin(username);
+        UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
+
+        return this.userDao.getUserByLogin(userDetails.getUsername());
     }
+
 }
 
 
