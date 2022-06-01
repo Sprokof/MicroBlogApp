@@ -23,6 +23,17 @@ import java.util.stream.Collectors;
 @Component
 public class UserServiceImpl implements UserService {
 
+
+    private static User currentNotLoginUser;
+
+    public static User getNotLoginUser(){
+        return currentNotLoginUser;
+    }
+
+    public static void setNotLoginUser(User user){
+        currentNotLoginUser = user;
+    }
+
     private final UserDaoImpl userDao;
     private final RoleDaoImpl roleDao;
 
@@ -89,9 +100,16 @@ public class UserServiceImpl implements UserService {
 
     public User getCurrentUser(){
         SecurityContext context = SecurityContextHolder.getContext();
-        UserDetails userDetails = (UserDetails) context.getAuthentication().getPrincipal();
-
-        return this.userDao.getUserByLogin(userDetails.getUsername());
+        User currentUser;
+    try {
+        String username = ((UserDetails) context.getAuthentication().
+                getPrincipal()).getUsername();
+        currentUser = this.getUserByLogin(username);
+    }
+    catch (ClassCastException e){
+        currentUser = getNotLoginUser();
+    }
+        return currentUser;
     }
 
 }

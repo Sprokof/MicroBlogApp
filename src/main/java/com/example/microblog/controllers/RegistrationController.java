@@ -2,6 +2,7 @@ package com.example.microblog.controllers;
 
 import com.example.microblog.dto.UserRegistrationDTO;
 import com.example.microblog.entity.User;
+import com.example.microblog.mail.ConfirmCode;
 import com.example.microblog.service.UserServiceImpl;
 import com.example.microblog.validation.UserDTOValidation;
 import lombok.Getter;
@@ -25,12 +26,12 @@ public class RegistrationController {
     private final UserDTOValidation userDTOValidation = new UserDTOValidation();
 
     @ModelAttribute("userDTO")
-    public UserRegistrationDTO userDTO(){
+    public UserRegistrationDTO userDTO() {
         return new UserRegistrationDTO();
-}
+    }
 
     @GetMapping("/registration")
-    public String registration(){
+    public String registration() {
         return "registration";
     }
 
@@ -44,12 +45,9 @@ public class RegistrationController {
                     builder().email(userDTO.getEmail()).
                     username(userDTO.getUsername()).
                     password(userDTO.getPassword()).build();
-
+            user.setAccepted(false);
             userService.saveUser(user);
             return "login";
         }
     }
-
-
-
 }

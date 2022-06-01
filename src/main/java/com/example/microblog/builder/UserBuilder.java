@@ -5,7 +5,6 @@ import com.example.microblog.entity.User;
 
 public abstract class UserBuilder {
 
-
     public UserBuilder email(String email){
         return null;
     }

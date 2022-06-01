@@ -25,15 +25,6 @@ import java.util.Set;
 @Component
 public class AuthProvider implements AuthenticationProvider {
 
-    private static User currentUser;
-
-    public static User getUser(){
-        return currentUser;
-    }
-
-    public static void setUser(User user){
-        currentUser = user;
-    }
 
     @Autowired
     private UserService userService;
@@ -52,7 +43,7 @@ public class AuthProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Unknown user");
         }
         if(!(current.getPassword().equals(password))){
-            AuthProvider.setUser(current);
+            UserServiceImpl.setNotLoginUser(current);
             throw new BadCredentialsException("Bad credentials");
         }
         Set<GrantedAuthority> userAuthorities =
@@ -73,11 +64,5 @@ public class AuthProvider implements AuthenticationProvider {
         return authentication.equals(UsernamePasswordAuthenticationToken.class);
     }
 
-    public static User getCurrentUser(){
-        SecurityContext context = SecurityContextHolder.getContext();
-        String username = ((UserDetails) context.getAuthentication().
-                getPrincipal()).getUsername();
 
-        return new UserServiceImpl().getUserByLogin(username);
-    }
 }

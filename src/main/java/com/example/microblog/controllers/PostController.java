@@ -37,7 +37,7 @@ public class PostController {
 
     @ModelAttribute("posts")
     public List<Post> ListOfPosts(){
-       List<Post> posts = AuthProvider.
+       List<Post> posts = userService.
                getCurrentUser().getPosts();
 
        posts.sort(new Comparator<Post>() {

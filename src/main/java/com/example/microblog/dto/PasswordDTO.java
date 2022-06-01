@@ -11,12 +11,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class PasswordDTO {
 
+    private String login;
     private String newPassword;
     private String confirmPassword;
+    private String confirmCode;
 
-    public PasswordDTO(String newPassword, String confirmPassword){
+    public PasswordDTO(String login, String newPassword, String confirmPassword, String confirmCode){
+        this.login = login;
         this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;
+        this.confirmCode = confirmCode;
+
+
     }
 
 

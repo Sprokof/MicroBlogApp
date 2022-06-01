@@ -31,7 +31,7 @@ public class HomeController {
 
     @ModelAttribute("currentUser")
     public User getCurrentUser(){
-        return AuthProvider.getCurrentUser();
+        return userService.getCurrentUser();
     }
 
     @GetMapping("/home")
@@ -42,9 +42,9 @@ public class HomeController {
 
     @PostMapping("/home")
     public String home(Post post,  Model model){
-        User user = AuthProvider.getCurrentUser();
+        User user = (User) model.getAttribute("currentUser");
         post.setPostDate(postDate());
-        user.addPost(post);
+        assert user != null; user.addPost(post);
         model.addAttribute("post", post);
         userService.updateUser(user);
         return "home";

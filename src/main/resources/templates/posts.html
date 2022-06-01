@@ -8,6 +8,14 @@
 </head>
 <body>
 <nav class="navbar navbar-default">
+    <div th:if="${currentUser.isAccepted() == false}">
+        <div class="alert-danger">
+            <div style="position: center">
+                You must confirm email address.
+                <a style="color: #a94442" th:href="@{'/confirmemail?email=' + ${currentUser.getEmail()}}">Click to confirm</a>
+            </div>
+        </div>
+    </div>
     <div class="container-fluid">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle collapsed"
