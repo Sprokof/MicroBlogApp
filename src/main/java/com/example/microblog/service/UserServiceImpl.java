@@ -105,7 +105,7 @@ public class UserServiceImpl implements UserService {
     try {
         String username = ((UserDetails) context.getAuthentication().
                 getPrincipal()).getUsername();
-        currentUser = this.getUserByLogin(username);
+        currentUser = this.userDao.getUserByLogin(username);
     }
     catch (ClassCastException e){
         currentUser = getNotLoginUser();

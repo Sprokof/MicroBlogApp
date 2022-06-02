@@ -2,14 +2,11 @@ package com.example.microblog.validation;
 
 import com.example.microblog.dto.PasswordDTO;
 import com.example.microblog.entity.User;
-import com.example.microblog.mail.ConfirmCode;
 import com.example.microblog.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 

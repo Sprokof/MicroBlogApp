@@ -78,7 +78,7 @@ public class PasswordController {
     public String code(@Valid @ModelAttribute("password") PasswordDTO passwordDTO,
                        BindingResult bindingResult, Model model){
         model.addAttribute("email", currentUser.getEmail());
-        String code = currentUser.generateChangePasswordCode();
+        String code = currentUser.getAcceptedCode();
         currentUser.setChangePasswordCode(code);
 
         passwordValidation.validateCode(new Object[]{currentUser, passwordDTO}, bindingResult);
@@ -88,7 +88,7 @@ public class PasswordController {
         }
         else {
             userService.updateUser(currentUser);
-            return "redirect:/code?success";
+            return "redirect:changepassword/code?success";
        }
     }
 

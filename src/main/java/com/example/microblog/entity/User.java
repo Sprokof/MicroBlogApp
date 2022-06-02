@@ -47,41 +47,41 @@ public class User {
     private Set<Role> roles;
 
 
-    public void addPost(Post post){
-        if(posts == null) this.posts = new LinkedList<Post>();
+    public void addPost(Post post) {
+        if (posts == null) this.posts = new LinkedList<Post>();
         this.posts.add(post);
         post.setUser(this);
     }
 
-    public void removePost(Post post){
+    public void removePost(Post post) {
         this.posts.remove(post);
         post.setUser(null);
     }
 
-    public void addRole(Role role){
-        if(roles == null) this.roles = new HashSet<>();
+    public void addRole(Role role) {
+        if (roles == null) this.roles = new HashSet<>();
         this.roles.add(role);
         role.setUser(this);
     }
 
-    public void removeRole(Role role){
+    public void removeRole(Role role) {
         this.roles.remove(role);
         role.setUser(null);
     }
 
-    public User(String email, String username, String password){
+    public User(String email, String username, String password) {
         this.email = email;
         this.username = username;
         this.password = password;
         this.isAccepted = false;
-        this.acceptedCode = getAcceptedCode();
+        this.acceptedCode = generateCode();
         this.changePasswordCode = null;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if(this == obj) return true;
-        if(!(obj instanceof  User)) return false;
+        if (this == obj) return true;
+        if (!(obj instanceof User)) return false;
         User user = (User) obj;
         return this.email.equals(user.email) &&
                 this.username.equals(user.username) &&
@@ -99,13 +99,21 @@ public class User {
                 '}';
     }
 
-    private String getAcceptedCode(){
-        return MD5.hash((this.username + this.id));
-    }
+    private String generateCode() {
+        String hashId = MD5.hash(String.valueOf(this.id));
+        String[] temp = new String[7];
+        String result = "";
 
-    public String generateChangePasswordCode(){
-        return MD5.hash((this.password + (Math.random() * 9) + this.id));
-    }
+        for (int i = 0; i < temp.length; i++) {
+            double d = (Math.random() * 10);
+            temp[i] = String.valueOf((int) d);
+        }
+        int index = 0;
+        while (index != temp.length) {
+            result += temp[index];
+        }
 
+        return result + hashId;
+
+    }
 }
-
