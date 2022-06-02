@@ -43,7 +43,6 @@ public class AuthProvider implements AuthenticationProvider {
             throw new BadCredentialsException("Unknown user");
         }
         if(!(current.getPassword().equals(password))){
-            UserServiceImpl.setNotLoginUser(current);
             throw new BadCredentialsException("Bad credentials");
         }
         Set<GrantedAuthority> userAuthorities =

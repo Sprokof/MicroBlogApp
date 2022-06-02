@@ -7,6 +7,7 @@ import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
 import com.example.microblog.hash.MD5;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
@@ -61,7 +62,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println(username);
         User user;
         if ((user = getUserByLogin(username)) == null) {
             throw new UsernameNotFoundException("Invalid login or password");
@@ -94,6 +94,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Cacheable(value="user", key="#login")
     public User getUserByLogin(String login) {
         return this.userDao.getUserByLogin(login);
     }

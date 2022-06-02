@@ -1,6 +1,7 @@
 package com.example.microblog.entity;
 
 
+import com.example.microblog.hash.MD5;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -34,6 +35,10 @@ public class User {
     private String password;
     @Column(name = "IS_ACCEPTED")
     private boolean isAccepted;
+    @Column(name = "ACCEPTED_CODE")
+    private String acceptedCode;
+    @Column(name = "CHANGE_PASSWORD_CODE")
+    private String changePasswordCode;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<Post> posts;
@@ -68,6 +73,9 @@ public class User {
         this.email = email;
         this.username = username;
         this.password = password;
+        this.isAccepted = false;
+        this.acceptedCode = getAcceptedCode();
+        this.changePasswordCode = null;
     }
 
     @Override
@@ -90,5 +98,14 @@ public class User {
                 ", password='" + password + '\'' +
                 '}';
     }
+
+    private String getAcceptedCode(){
+        return MD5.hash((this.username + this.id));
+    }
+
+    public String generateChangePasswordCode(){
+        return MD5.hash((this.password + (Math.random() * 9) + this.id));
+    }
+
 }
 

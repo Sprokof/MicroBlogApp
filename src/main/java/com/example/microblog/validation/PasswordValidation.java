@@ -9,55 +9,66 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
-import static com.example.microblog.mail.ConfirmCode.generateCode;
-import static com.example.microblog.mail.ConfirmCode.getUsersCodes;
 
 @Component
-public class PasswordValidation implements Validator {
+public class PasswordValidation {
 
     @Autowired
     UserService userService;
 
-    @Override
     public boolean supports(Class<?> oClass) {
+        if(oClass.equals(Object[].class)) {
+            return true;
+        }
         return PasswordDTO.class.equals(oClass);
     }
 
-    @Override
-    public void validate(Object o, Errors errors) {
+    public void validateUsername(Object o, Errors errors){
         if(supports(o.getClass())){
 
             PasswordDTO passwordDTO = (PasswordDTO) o;
 
-            ConfirmCode.getUsersCodes().put(passwordDTO.getLogin(), new ConfirmCode(generateCode()));
-
-            User user = userService.getUserByLogin(passwordDTO.getLogin());
-            if(user == null){
-                errors.rejectValue("login", "Wrong.login");
+            if(userService.existUserByUsername(passwordDTO.getUsername()) == null){
+                errors.rejectValue("username", "Username.not.exist");
             }
+        }
+    }
+
+    public void validatePasswords(Object o, Errors errors) {
+        if (supports(o.getClass())) {
+
+            PasswordDTO passwordDTO = (PasswordDTO) o;
 
             Pattern password = Pattern.
                     compile("^(?=.*[0-9])(?=.*[a-z])" +
                             "(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$");
 
-            if(!(password.matcher(passwordDTO.getNewPassword()).find())){
+            if (!(password.matcher(passwordDTO.getNewPassword()).find())) {
                 errors.rejectValue("newPassword", "Wrong.password.format");
-            }
-            else {
+            } else {
                 String pass1 = passwordDTO.getNewPassword();
                 String pass2 = passwordDTO.getConfirmPassword();
 
-                if(!pass1.equals(pass2)){
+                if (!pass1.equals(pass2)) {
                     errors.rejectValue("confirmPassword", "Passwords.not.equals");
                 }
             }
-            String inputCode = passwordDTO.getConfirmCode(),
-                    generatedCode = getUsersCodes().get(passwordDTO.getLogin()).getCodeFromLetter();
-            if(!inputCode.equals(generatedCode)){
-                errors.rejectValue("confirmCode", "Wrong.code");
-            }
         }
     }
+
+    public void validateCode(Object[] objs, Errors errors){
+        if(supports(objs.getClass())){
+            User current = (User) objs[0];
+            PasswordDTO passwordDTO = (PasswordDTO) objs[1];
+            if(!current.getChangePasswordCode().
+                    equals(passwordDTO.getConfirmCode())){
+                errors.rejectValue("confirmCode", "Wrong.code");
+            }
+
+        }
+    }
+
 }
