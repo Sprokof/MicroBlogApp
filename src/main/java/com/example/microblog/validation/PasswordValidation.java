@@ -60,7 +60,7 @@ public class PasswordValidation {
         if(supports(objs.getClass())){
             User current = (User) objs[0];
             PasswordDTO passwordDTO = (PasswordDTO) objs[1];
-            if(!current.getChangePasswordCode().
+            if(!current.getAcceptedCode().
                     equals(passwordDTO.getConfirmCode())){
                 errors.rejectValue("confirmCode", "Wrong.code");
             }

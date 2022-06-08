@@ -7,6 +7,8 @@ import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
 import com.example.microblog.hash.MD5;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -17,6 +19,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,16 +27,9 @@ import java.util.stream.Collectors;
 @Component
 public class UserServiceImpl implements UserService {
 
-
-    private static User currentNotLoginUser;
-
-    public static User getNotLoginUser(){
-        return currentNotLoginUser;
-    }
-
-    public static void setNotLoginUser(User user){
-        currentNotLoginUser = user;
-    }
+    @Getter
+    @Setter
+    private User currentUserByLogin;
 
     private final UserDaoImpl userDao;
     private final RoleDaoImpl roleDao;
@@ -101,18 +97,16 @@ public class UserServiceImpl implements UserService {
 
     public User getCurrentUser(){
         SecurityContext context = SecurityContextHolder.getContext();
-        User currentUser;
-    try {
-        String username = ((UserDetails) context.getAuthentication().
-                getPrincipal()).getUsername();
-        currentUser = this.userDao.getUserByLogin(username);
-    }
-    catch (ClassCastException e){
-        currentUser = getNotLoginUser();
-    }
-        return currentUser;
+
+        UserDetails details = ((UserDetails) context.getAuthentication().
+                getPrincipal());
+
+
+        return this.userDao.getUserByUsername(details.getUsername());
     }
 
+
 }
+
 
 

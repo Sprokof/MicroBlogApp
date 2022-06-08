@@ -35,10 +35,9 @@ public class User {
     private String password;
     @Column(name = "IS_ACCEPTED")
     private boolean isAccepted;
-    @Column(name = "ACCEPTED_CODE")
-    private String acceptedCode;
-    @Column(name = "CHANGE_PASSWORD_CODE")
-    private String changePasswordCode;
+
+    transient String acceptedCode;
+
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", fetch = FetchType.EAGER)
     private List<Post> posts;
@@ -74,8 +73,6 @@ public class User {
         this.username = username;
         this.password = password;
         this.isAccepted = false;
-        this.acceptedCode = generateCode();
-        this.changePasswordCode = null;
     }
 
     @Override
@@ -99,21 +96,4 @@ public class User {
                 '}';
     }
 
-    private String generateCode() {
-        String hashId = MD5.hash(String.valueOf(this.id));
-        String[] temp = new String[7];
-        String result = "";
-
-        for (int i = 0; i < temp.length; i++) {
-            double d = (Math.random() * 10);
-            temp[i] = String.valueOf((int) d);
-        }
-        int index = 0;
-        while (index != temp.length) {
-            result += temp[index];
-        }
-
-        return result + hashId;
-
-    }
 }

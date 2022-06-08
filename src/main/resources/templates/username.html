@@ -14,7 +14,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
-            <h1>Step one</h1>
+            <h1 style="color: cadetblue">Step one</h1>
             <form th:object="${password}" method="post" th:action="@{/changepassword/username}">
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('username')}? 'has-error':''">

@@ -8,36 +8,51 @@
     <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/3.3.7/css/bootstrap.min.css}"/>
     <link rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
 
-    <title>Login</title>
+    <title>Accept account</title>
 </head>
 <body>
 <div class="container">
-
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <h1>Confirm email</h1>
-            <form th:action="@{/confirmemail}" th:object="${code}" method="post">
-                <div class="form-group">
-                    <label th:for="${code}">Confirm email</label>:
+            <div id="confirmMessage"
+                 th:if="${mail.getCurrentUser().isAccepted()}">
+                <div class="alert-success"
+                     style="height: 30px">
+                    Account was successfully confirmed.
+                    <a th:href="@{/home}" style="color: darkolivegreen">Back home</a>
+                </div>
+            </div>
+            <form th:action="@{'/confirm?email=' + ${mail.getCurrentUser().getEmail()}}"
+                  th:object="${mail}" method="post">
+                <div class="form-group"
+                th:classappend="${#fields.hasErrors('code')}? 'has-erorr':''">
+                    <p th:text="'Activation code was sent to next e-mail (' + ${mail.getCurrentUser().getEmail()} + ') address' "></p>
+                    <label th:for="code">Confirm email</label>:
                     <input th:type="text"
-                           th:field="${code}"
+                           th:id="code"
+                           th:field="${mail.code}"
                            class="form-control"
                            autofocus="autofocus"
                            placeholder="Write code from email"/>
+                    <p class="error-message" style="color: maroon"
+                       th:each="error : ${#fields.errors('code')}"
+                       th:text="${error}">Validation error</p>
                 </div>
                 <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6 col-sm-offset-3">
-                                <input type="submit"
+                                <input id="input" type="submit"
                                        class="form-control btn btn-info"
-                                       style="color: darkslateblue"
-                                       value="Done"/>
+                                       style="color: whitesmoke"
+                                       value="Accept code"
+                                />
                             </div>
                         </div>
                 </div>
-                <div  class="form-group">
-                    <a th:href="@{/home}">Confirm later</a>
-                </div>
+                   <div th:if="${!mail.getCurrentUser().isAccepted()}">
+                       <a th:href="@{/home}">Confirm later</a>
+                   </div>
                 <div th:insert="~{footer :: copy}" style="position: fixed"></div>
             </form>
         </div>

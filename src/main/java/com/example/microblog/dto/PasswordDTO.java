@@ -16,13 +16,15 @@ public class PasswordDTO {
     private String confirmPassword;
     private String confirmCode;
 
+    private boolean changed;
+
     public PasswordDTO(String username, String newPassword,
                        String confirmPassword, String confirmCode){
         this.username = username;
         this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;
         this.confirmCode = confirmCode;
-
+        this.changed = false;
 
 
     }

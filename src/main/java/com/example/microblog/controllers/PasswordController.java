@@ -3,7 +3,9 @@ package com.example.microblog.controllers;
 import com.example.microblog.dto.PasswordDTO;
 import com.example.microblog.entity.User;
 import com.example.microblog.hash.MD5;
+import com.example.microblog.mail.MailSender;
 import com.example.microblog.service.UserService;
+import com.example.microblog.service.UserServiceImpl;
 import com.example.microblog.validation.PasswordValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,10 +22,13 @@ public class PasswordController {
 
     @Autowired
     private PasswordValidation passwordValidation;
+
     @Autowired
     private UserService userService;
 
-    private static User currentUser;
+
+    @Autowired
+    MailSender mailSender;
 
     @ModelAttribute("password")
     public PasswordDTO getPasswordDTO(){
@@ -32,7 +37,7 @@ public class PasswordController {
 
     @GetMapping("/changepassword/username")
     public String username(){
-        return "changepasswordPage1";
+        return "username";
     }
 
 
@@ -41,54 +46,60 @@ public class PasswordController {
                          BindingResult bindingResult) {
         passwordValidation.validateUsername(passwordDTO, bindingResult);
         if(bindingResult.hasErrors()){
-            return "changepasswordPage1";
+            return "username";
         }
         else {
-            currentUser = userService.getUserByLogin(passwordDTO.getUsername());
-            return "changepasswordPage2";
+            String username = passwordDTO.getUsername();
+            ((UserServiceImpl) userService).
+                    setCurrentUserByLogin(userService.getUserByLogin(username));
+            return "passwords";
         }
     }
 
     @GetMapping("/changepassword/passwords")
     public String passwords(){
-        return "changepasswordPage2";
+        return "passwords";
     }
 
     @PostMapping("/changepassword/passwords")
     public String passwords(@Valid @ModelAttribute("password") PasswordDTO passwordDTO,
                             BindingResult bindingResult) {
+        User user = ((UserServiceImpl) userService).getCurrentUserByLogin();
         passwordValidation.validatePasswords(passwordDTO, bindingResult);
         if (bindingResult.hasErrors()) {
-            return "changepasswordPage2";
+            return "passwords";
         } else {
+                mailSender.send(user.getEmail(),
+                        "Change password code", mailSender.changePasswordMessage(user));
+            }
 
-            currentUser.setPassword(MD5.hash(passwordDTO.getNewPassword()));
-
-            return "changepasswordPage3";
-        }
+            user.setPassword(MD5.hash(passwordDTO.getNewPassword()));
+            return "code";
 
     }
 
     @GetMapping("/changepassword/code")
     public String code(){
-        return "changepasswordPage3";
+        return "code";
     }
 
     @PostMapping("/changepassword/code")
     public String code(@Valid @ModelAttribute("password") PasswordDTO passwordDTO,
                        BindingResult bindingResult, Model model){
-        model.addAttribute("email", currentUser.getEmail());
-        String code = currentUser.getAcceptedCode();
-        currentUser.setChangePasswordCode(code);
 
-        passwordValidation.validateCode(new Object[]{currentUser, passwordDTO}, bindingResult);
+        User user = ((UserServiceImpl) userService).
+                getCurrentUserByLogin();
+
+        model.addAttribute("email", user.getEmail());
+
+        passwordValidation.validateCode(new Object[]{user, passwordDTO}, bindingResult);
 
         if(bindingResult.hasErrors()){
-           return "changepasswordPage3";
+           return "code";
         }
         else {
-            userService.updateUser(currentUser);
-            return "redirect:changepassword/code?success";
+            passwordDTO.setChanged(true);
+            return "code";
        }
     }
 

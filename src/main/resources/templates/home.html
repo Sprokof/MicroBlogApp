@@ -15,7 +15,8 @@
         <div class="alert-danger">
             <div style="position: center">
                 You must confirm email address.
-                <a style="color: #a94442" th:href="@{'/confirmemail?email=' + ${currentUser.getEmail()}}">Click to confirm</a>
+                <a style="color: #a94442"
+                   th:href="@{'/confirm?email=' + ${currentUser.getEmail()}}">Click to confirm</a>
             </div>
         </div>
     </div>
@@ -25,7 +26,7 @@
                     data-toggle="collapse" data-target="#bs-example-navbarcollapse-1" aria-expanded="false">
                 <span class="sr-only">Toggle navigation</span>
             </button>
-            <img src="/images/logo.png" th:alt="Logo"/>&nbsp;<h2>Blog</h2>
+            <img src="/images/logo.png" alt="Logo"/>&nbsp;<h3 style="color: black">MicroBlog</h3>
         </div>
         <div class="collapse navbar-collapse" id="bs-examplenavbar-collapse-1">
             <ul class="nav navbar-nav">
@@ -52,7 +53,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <form class="navbar-form navbar-left"
-                                  role="form" th:action="@{/login}" method="post">
+                                  role="form" th:action="@{/logout}" method="post">
                                 <input type="hidden" name="action"
                                        id="action" value="logout"/>
                                 <button class="btn btn-default"
