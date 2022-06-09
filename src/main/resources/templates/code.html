@@ -22,7 +22,7 @@
                 </div>
             </div>
             <form th:object="${password}" method="post"
-                  th:action="@{'/changepassword/code?ischanged=true'}">
+                  th:action="@{'/changepassword/code?confirm=' + ${password.isChanged()}}">
 
                 <div class="form-group"
                      th:classappend="${#fields.hasErrors('confirmCode')}? 'has-error':''">

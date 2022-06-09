@@ -1,5 +1,6 @@
 package com.example.microblog.dao;
 
+import com.example.microblog.entity.Admin;
 import com.example.microblog.entity.Post;
 import com.example.microblog.entity.Role;
 import com.example.microblog.entity.User;
@@ -14,7 +15,7 @@ public class InstanceSessionFactory {
     public static synchronized SessionFactory getInstance(){
         if(instance == null){
             instance = getSessionFactory(new Class[]{
-                User.class, Role.class, Post.class});
+                User.class, Role.class, Post.class, Admin.class});
         }
     return instance;
     }

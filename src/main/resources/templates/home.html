@@ -32,8 +32,13 @@
             <ul class="nav navbar-nav">
                 <li class="active"><a th:href="@{/home}">Home<span
                         class="sr-only">(current)</span></a></li>
-                <li><a th:href="@{/newsFeed}">News Feed</a></li>
+                <li><a th:href="@{/newsFeed}">News feed</a></li>
             </ul>
+            <div th:if="${currentUser.isAdmin()}">
+                <ul class="nav navbar-nav">
+                  <li><a th:href="@{/adminpage}">Admin page</a></li>
+                </ul>
+            </div>
             <form class="navbar-form navbar-right" role="search"
                   th:action="@{/search}" method="get">
                 <div class="form-group">
@@ -56,8 +61,7 @@
                                   role="form" th:action="@{/logout}" method="post">
                                 <input type="hidden" name="action"
                                        id="action" value="logout"/>
-                                <button class="btn btn-default"
-                                        id="addBookButton">Logout</button>
+                                <button class="btn btn-default">Logout</button>
                             </form>
                         </li>
                         <li><a th:href="@{'/posts?userid=' + ${currentUser.id}}">

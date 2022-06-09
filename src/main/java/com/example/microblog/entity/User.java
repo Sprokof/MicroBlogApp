@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.persistence.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Entity
 @Table(name = "USERS")
@@ -94,6 +95,12 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+
+    public boolean isAdmin(){
+        return this.getRoles().stream().
+                    map(Role::getRoleName).anyMatch((r) -> r.equals("ADMIN"));
     }
 
 }

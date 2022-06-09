@@ -74,6 +74,7 @@ public class PasswordController {
             }
 
             user.setPassword(MD5.hash(passwordDTO.getNewPassword()));
+            passwordDTO.setChanged(false);
             return "code";
 
     }

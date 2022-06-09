@@ -2,6 +2,7 @@ package com.example.microblog.service;
 
 import com.example.microblog.builder.UserBuilder;
 import com.example.microblog.config.AuthProvider;
+import com.example.microblog.dao.AdminDAOImpl;
 import com.example.microblog.dao.RoleDaoImpl;
 import com.example.microblog.dao.UserDaoImpl;
 import com.example.microblog.entity.Role;
@@ -32,19 +33,20 @@ public class UserServiceImpl implements UserService {
     private User currentUserByLogin;
 
     private final UserDaoImpl userDao;
-    private final RoleDaoImpl roleDao;
+    private AdminDAOImpl adminDAO;
 
     private final BCryptPasswordEncoder encoder;
 
     public UserServiceImpl() {
         this.encoder = new BCryptPasswordEncoder();
         this.userDao = new UserDaoImpl();
-        this.roleDao = new RoleDaoImpl();
+        this.adminDAO = new AdminDAOImpl();
+
     }
 
     @Override
     public void saveUser(User user) {
-        Role role = new Role("USER");
+        Role role = new Role(getRoleName(user.getEmail()));
         String hashPassword = MD5.hash(user.getPassword());
         user.setPassword(hashPassword);
         user.addRole(role);
@@ -105,6 +107,12 @@ public class UserServiceImpl implements UserService {
         return this.userDao.getUserByUsername(details.getUsername());
     }
 
+    private String getRoleName(String email) {
+        if (this.adminDAO.isAdmin(email)) {
+            return "ADMIN";
+        }
+        return "USER";
+    }
 
 }
 
