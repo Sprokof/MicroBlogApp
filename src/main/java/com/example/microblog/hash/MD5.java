@@ -9,17 +9,19 @@ public class MD5 {
         StringBuffer sb = new StringBuffer();
         MessageDigest md = null;
     try{
-              md  = MessageDigest.getInstance("MD5");}
+              md  = MessageDigest.getInstance("MD5");
+    }
     catch (NoSuchAlgorithmException e){
         e.printStackTrace();
     }
+
     assert md != null;
     md.update(text.getBytes());
 
     byte[] bytes =  md.digest();
-    for(int i = 0; i < bytes.length; i++){
-        sb.append(Integer.toString((bytes[i] & 0xff) +0x100, 16).substring(1));
-    }
+        for (byte aByte : bytes) {
+            sb.append(Integer.toString((aByte & 0xff) + 0x100, 16).substring(1));
+        }
 
     return sb.toString();
 
